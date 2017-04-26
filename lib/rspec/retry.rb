@@ -133,9 +133,10 @@ module RSpec
           if attempts != retry_count
             exception_strings =
               if ::RSpec::Core::MultipleExceptionError::InterfaceTag === example.exception
-                example.exception.all_exceptions.map(&:to_s)
+                example.exception.all_exceptions.map { |ex| "Exception: #{ex.to_s}\nBacktrace:\n#{ex.backtrace.join("\n")}"}
               else
-                [example.exception.to_s]
+                ex = example.exception
+                ["Exception: #{ex.to_s}\nBacktrace:\n#{ex.backtrace.join("\n")}"]
               end
 
             try_message = "\n#{ordinalize(attempts)} Try error in #{example.location}:\n#{exception_strings.join "\n"}\n"
